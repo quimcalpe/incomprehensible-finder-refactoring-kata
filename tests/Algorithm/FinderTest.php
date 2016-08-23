@@ -1,45 +1,34 @@
 <?php
-
 declare(strict_types = 1);
 
 namespace CodelyTV\FinderKataTest\Algorithm;
 
 use CodelyTV\FinderKata\Algorithm\Finder;
-use CodelyTV\FinderKata\Algorithm\FT;
-use CodelyTV\FinderKata\Algorithm\Thing;
+use CodelyTV\FinderKata\Algorithm\Person;
+use CodelyTV\FinderKata\Algorithm\SearchClosest;
+use CodelyTV\FinderKata\Algorithm\SearchFurthest;
 use PHPUnit\Framework\TestCase;
 
 final class FinderTest extends TestCase
 {
-    /** @var Thing */
+    /** @var Person */
     private $sue;
 
-    /** @var Thing */
+    /** @var Person */
     private $greg;
 
-    /** @var Thing */
+    /** @var Person */
     private $sarah;
 
-    /** @var Thing */
+    /** @var Person */
     private $mike;
 
     protected function setUp()
     {
-        $this->sue            = new Thing();
-        $this->sue->name      = "Sue";
-        $this->sue->birthDate = new \DateTime("1950-01-01");
-
-        $this->greg            = new Thing();
-        $this->greg->name      = "Greg";
-        $this->greg->birthDate = new \DateTime("1952-05-01");
-
-        $this->sarah            = new Thing();
-        $this->sarah->name      = "Sarah";
-        $this->sarah->birthDate = new \DateTime("1982-01-01");
-
-        $this->mike            = new Thing();
-        $this->mike->name      = "Mike";
-        $this->mike->birthDate = new \DateTime("1979-01-01");
+        $this->sue = new Person("Sue", new \DateTime("1950-01-01"));
+        $this->greg = new Person("Greg", new \DateTime("1952-05-01"));
+        $this->sarah = new Person("Sarah", new \DateTime("1982-05-01"));
+        $this->mike = new Person("Mike", new \DateTime("1979-01-01"));
     }
 
     /** @test */
@@ -48,10 +37,10 @@ final class FinderTest extends TestCase
         $list   = [];
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::ONE);
+        $result = $finder->find(new SearchClosest());
 
-        $this->assertEquals(null, $result->p1);
-        $this->assertEquals(null, $result->p2);
+        $this->assertEquals(null, $result->older());
+        $this->assertEquals(null, $result->younger());
     }
 
     /** @test */
@@ -61,10 +50,10 @@ final class FinderTest extends TestCase
         $list[] = $this->sue;
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::ONE);
+        $result = $finder->find(new SearchClosest());
 
-        $this->assertEquals(null, $result->p1);
-        $this->assertEquals(null, $result->p2);
+        $this->assertEquals(null, $result->older());
+        $this->assertEquals(null, $result->younger());
     }
 
     /** @test */
@@ -75,10 +64,10 @@ final class FinderTest extends TestCase
         $list[] = $this->greg;
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::ONE);
+        $result = $finder->find(new SearchClosest());
 
-        $this->assertEquals($this->sue, $result->p1);
-        $this->assertEquals($this->greg, $result->p2);
+        $this->assertEquals($this->sue, $result->older());
+        $this->assertEquals($this->greg, $result->younger());
     }
 
     /** @test */
@@ -89,10 +78,10 @@ final class FinderTest extends TestCase
         $list[] = $this->greg;
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::TWO);
+        $result = $finder->find(new SearchFurthest());
 
-        $this->assertEquals($this->greg, $result->p1);
-        $this->assertEquals($this->mike, $result->p2);
+        $this->assertEquals($this->greg, $result->older());
+        $this->assertEquals($this->mike, $result->younger());
     }
 
     /** @test */
@@ -105,10 +94,10 @@ final class FinderTest extends TestCase
         $list[] = $this->greg;
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::TWO);
+        $result = $finder->find(new SearchFurthest());
 
-        $this->assertEquals($this->sue, $result->p1);
-        $this->assertEquals($this->sarah, $result->p2);
+        $this->assertEquals($this->sue, $result->older());
+        $this->assertEquals($this->sarah, $result->younger());
     }
 
     /**
@@ -123,9 +112,9 @@ final class FinderTest extends TestCase
         $list[] = $this->greg;
         $finder = new Finder($list);
 
-        $result = $finder->find(FT::ONE);
+        $result = $finder->find(new SearchClosest());
 
-        $this->assertEquals($this->sue, $result->p1);
-        $this->assertEquals($this->greg, $result->p2);
+        $this->assertEquals($this->sue, $result->older());
+        $this->assertEquals($this->greg, $result->younger());
     }
 }
