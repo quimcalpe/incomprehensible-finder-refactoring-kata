@@ -6,13 +6,13 @@ namespace CodelyTV\FinderKata\Algorithm;
 class Pair
 {
     /** @var Person */
-    private $older;
+    protected $older;
 
     /** @var Person */
-    private $younger;
+    protected $younger;
 
     /** @var int */
-    public $diffInSeconds;
+    protected $diffInSeconds;
 
     public function __construct(Person $p1, Person $p2)
     {
@@ -26,18 +26,12 @@ class Pair
         $this->diffInSeconds = $this->younger->birthDate()->getTimestamp() - $this->older->birthDate()->getTimestamp();
     }
 
-    /**
-     * @return Person
-     */
-    public function older() : Person
+    public function older()
     {
         return $this->older;
     }
 
-    /**
-     * @return Person
-     */
-    public function younger() : Person
+    public function younger()
     {
         return $this->younger;
     }

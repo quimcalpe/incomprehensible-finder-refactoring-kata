@@ -12,7 +12,7 @@ class SearchClosest implements SearchCriteria
         /** @var Pair[] $pairs */
         $matchingPair = $pairs[0];
         foreach ($pairs as $pair) {
-            if ($pair->diffInSeconds < $matchingPair->diffInSeconds) {
+            if ($pair->diffInSeconds() < $matchingPair->diffInSeconds()) {
                 $matchingPair = $pair;
             }
         }
